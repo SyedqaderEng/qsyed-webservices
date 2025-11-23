@@ -12,6 +12,7 @@ import toolRoutes from './routes/tool.routes';
 import jobRoutes from './routes/job.routes';
 import downloadRoutes from './routes/download.routes';
 import healthRoutes from './routes/health.routes';
+import previewRoutes from './routes/preview.routes';
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use('/api/tools', toolRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/download', downloadRoutes);
 app.use('/api/health', healthRoutes);
+app.use('/api/preview', previewRoutes);
 
 // Root route
 app.get('/', (req, res) => {
