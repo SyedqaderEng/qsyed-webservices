@@ -5,6 +5,7 @@
 
 import { moduleRegistry } from '../registry/module.registry';
 import { PdfSplitModule } from '../../modules/pdf/pdf-split.module';
+import { PdfToWordModule } from '../../modules/pdf/pdf-to-word.module';
 // Import other modules here as they are created
 
 export function loadModules(): void {
@@ -12,6 +13,7 @@ export function loadModules(): void {
 
   // Register PDF modules
   moduleRegistry.register(new PdfSplitModule());
+  moduleRegistry.register(new PdfToWordModule());
   // moduleRegistry.register(new PdfMergeModule());
   // moduleRegistry.register(new PdfCompressModule());
   // ... more modules

@@ -198,6 +198,46 @@
       "chainable": true,
       "estimatedDuration": 4
     },
+    "pdf_to_word": {
+      "displayName": "PDF to Word (DOCX)",
+      "category": "pdf",
+      "engine": "pdf",
+      "module": "pdf.toWord",
+      "action": "convert",
+      "description": "Convert PDF to editable Word document with OCR support",
+      "params": {
+        "ocr": {
+          "type": "boolean",
+          "required": false,
+          "default": false,
+          "description": "Enable OCR for scanned PDFs"
+        },
+        "ocrLanguage": {
+          "type": "string",
+          "required": false,
+          "default": "eng",
+          "enum": ["eng", "fra", "spa", "deu", "ita", "por", "rus", "chi_sim", "jpn", "kor", "ara"],
+          "description": "OCR language (if OCR is enabled)"
+        },
+        "preserveLayout": {
+          "type": "string",
+          "required": false,
+          "default": "high",
+          "enum": ["high", "fast"],
+          "description": "Layout preservation level"
+        },
+        "password": {
+          "type": "string",
+          "required": false,
+          "description": "Password for encrypted PDFs (optional)"
+        }
+      },
+      "inputTypes": ["application/pdf"],
+      "outputType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 30
+    },
     "image_resize": {
       "displayName": "Resize Image",
       "category": "image",
