@@ -1,0 +1,493 @@
+{
+  "version": "1.0.0",
+  "description": "Universal tools registry - all 300+ tools defined here",
+  "categories": [
+    "pdf",
+    "image",
+    "video",
+    "audio",
+    "document",
+    "archive",
+    "text",
+    "ocr",
+    "ai"
+  ],
+  "tools": {
+    "pdf_split": {
+      "displayName": "Split PDF",
+      "category": "pdf",
+      "engine": "pdf",
+      "module": "pdf.split",
+      "action": "splitByPages",
+      "description": "Split PDF into multiple files",
+      "params": {
+        "pagesPerFile": {
+          "type": "number",
+          "required": true,
+          "default": 5,
+          "description": "Number of pages per output file"
+        }
+      },
+      "inputTypes": ["application/pdf"],
+      "outputType": "application/zip",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 5
+    },
+    "pdf_split_individual": {
+      "displayName": "Split PDF (Individual Pages)",
+      "category": "pdf",
+      "engine": "pdf",
+      "module": "pdf.split",
+      "action": "splitIndividual",
+      "description": "Split PDF into individual page files",
+      "params": {},
+      "inputTypes": ["application/pdf"],
+      "outputType": "application/zip",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 5
+    },
+    "pdf_keep_pages": {
+      "displayName": "Extract Pages from PDF",
+      "category": "pdf",
+      "engine": "pdf",
+      "module": "pdf.split",
+      "action": "keepPages",
+      "description": "Keep only selected pages from PDF",
+      "params": {
+        "pages": {
+          "type": "array",
+          "required": true,
+          "description": "Array of page numbers to keep (1-indexed)"
+        }
+      },
+      "inputTypes": ["application/pdf"],
+      "outputType": "application/pdf",
+      "batchSupport": false,
+      "chainable": true,
+      "estimatedDuration": 3
+    },
+    "pdf_split_ranges": {
+      "displayName": "Split PDF by Ranges",
+      "category": "pdf",
+      "engine": "pdf",
+      "module": "pdf.split",
+      "action": "splitByRanges",
+      "description": "Split PDF by custom page ranges",
+      "params": {
+        "ranges": {
+          "type": "array",
+          "required": true,
+          "description": "Array of {start, end} page ranges"
+        }
+      },
+      "inputTypes": ["application/pdf"],
+      "outputType": "application/zip",
+      "batchSupport": false,
+      "chainable": true,
+      "estimatedDuration": 4
+    },
+    "pdf_merge": {
+      "displayName": "Merge PDFs",
+      "category": "pdf",
+      "engine": "pdf",
+      "module": "pdf.merge",
+      "action": "merge",
+      "description": "Combine multiple PDF files into one",
+      "params": {
+        "order": {
+          "type": "array",
+          "required": false,
+          "description": "Custom order of files (by index)"
+        }
+      },
+      "inputTypes": ["application/pdf"],
+      "outputType": "application/pdf",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 5,
+      "multipleFiles": true
+    },
+    "pdf_compress": {
+      "displayName": "Compress PDF",
+      "category": "pdf",
+      "engine": "pdf",
+      "module": "pdf.compress",
+      "action": "compress",
+      "description": "Reduce PDF file size",
+      "params": {
+        "level": {
+          "type": "string",
+          "required": false,
+          "default": "medium",
+          "enum": ["low", "medium", "high"],
+          "description": "Compression level"
+        }
+      },
+      "inputTypes": ["application/pdf"],
+      "outputType": "application/pdf",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 5
+    },
+    "pdf_rotate": {
+      "displayName": "Rotate PDF Pages",
+      "category": "pdf",
+      "engine": "pdf",
+      "module": "pdf.rotate",
+      "action": "rotate",
+      "description": "Rotate PDF pages by angle",
+      "params": {
+        "angle": {
+          "type": "number",
+          "required": true,
+          "enum": [90, 180, 270, -90],
+          "description": "Rotation angle in degrees"
+        },
+        "pages": {
+          "type": "string",
+          "required": false,
+          "default": "all",
+          "description": "Pages to rotate (all, 1,3,5, or 1-5)"
+        }
+      },
+      "inputTypes": ["application/pdf"],
+      "outputType": "application/pdf",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 3
+    },
+    "pdf_watermark": {
+      "displayName": "Add Watermark to PDF",
+      "category": "pdf",
+      "engine": "pdf",
+      "module": "pdf.watermark",
+      "action": "addText",
+      "description": "Add text watermark to PDF pages",
+      "params": {
+        "text": {
+          "type": "string",
+          "required": true,
+          "description": "Watermark text"
+        },
+        "opacity": {
+          "type": "number",
+          "required": false,
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "description": "Watermark opacity (0-1)"
+        },
+        "rotation": {
+          "type": "number",
+          "required": false,
+          "default": 45,
+          "description": "Rotation angle in degrees"
+        },
+        "fontSize": {
+          "type": "number",
+          "required": false,
+          "default": 48,
+          "description": "Font size"
+        }
+      },
+      "inputTypes": ["application/pdf"],
+      "outputType": "application/pdf",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 4
+    },
+    "pdf_to_word": {
+      "displayName": "PDF to Word (DOCX)",
+      "category": "pdf",
+      "engine": "pdf",
+      "module": "pdf.toWord",
+      "action": "convert",
+      "description": "Convert PDF to editable Word document with OCR support",
+      "params": {
+        "ocr": {
+          "type": "boolean",
+          "required": false,
+          "default": false,
+          "description": "Enable OCR for scanned PDFs"
+        },
+        "ocrLanguage": {
+          "type": "string",
+          "required": false,
+          "default": "eng",
+          "enum": ["eng", "fra", "spa", "deu", "ita", "por", "rus", "chi_sim", "jpn", "kor", "ara"],
+          "description": "OCR language (if OCR is enabled)"
+        },
+        "preserveLayout": {
+          "type": "string",
+          "required": false,
+          "default": "high",
+          "enum": ["high", "fast"],
+          "description": "Layout preservation level"
+        },
+        "password": {
+          "type": "string",
+          "required": false,
+          "description": "Password for encrypted PDFs (optional)"
+        }
+      },
+      "inputTypes": ["application/pdf"],
+      "outputType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 30
+    },
+    "image_resize": {
+      "displayName": "Resize Image",
+      "category": "image",
+      "engine": "image",
+      "module": "image.resize",
+      "action": "resize",
+      "description": "Resize image to specified dimensions",
+      "params": {
+        "width": {
+          "type": "number",
+          "required": false,
+          "description": "Target width in pixels"
+        },
+        "height": {
+          "type": "number",
+          "required": false,
+          "description": "Target height in pixels"
+        },
+        "maintainAspectRatio": {
+          "type": "boolean",
+          "required": false,
+          "default": true,
+          "description": "Maintain aspect ratio"
+        }
+      },
+      "inputTypes": ["image/jpeg", "image/png", "image/webp", "image/gif"],
+      "outputType": "image/jpeg",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 2
+    },
+    "image_compress": {
+      "displayName": "Compress Image",
+      "category": "image",
+      "engine": "image",
+      "module": "image.compress",
+      "action": "compress",
+      "description": "Reduce image file size",
+      "params": {
+        "quality": {
+          "type": "number",
+          "required": false,
+          "default": 80,
+          "min": 1,
+          "max": 100,
+          "description": "Quality level (1-100)"
+        }
+      },
+      "inputTypes": ["image/jpeg", "image/png", "image/webp"],
+      "outputType": "image/jpeg",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 2
+    },
+    "image_convert": {
+      "displayName": "Convert Image Format",
+      "category": "image",
+      "engine": "image",
+      "module": "image.convert",
+      "action": "format",
+      "description": "Convert image to different format",
+      "params": {
+        "format": {
+          "type": "string",
+          "required": true,
+          "enum": ["jpeg", "png", "webp", "gif", "bmp"],
+          "description": "Target format"
+        }
+      },
+      "inputTypes": ["image/jpeg", "image/png", "image/webp", "image/gif", "image/bmp"],
+      "outputType": "image/jpeg",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 2
+    },
+    "video_trim": {
+      "displayName": "Trim Video",
+      "category": "video",
+      "engine": "video",
+      "module": "video.trim",
+      "action": "cut",
+      "description": "Trim video by time range",
+      "params": {
+        "start": {
+          "type": "number",
+          "required": true,
+          "description": "Start time in seconds"
+        },
+        "end": {
+          "type": "number",
+          "required": true,
+          "description": "End time in seconds"
+        }
+      },
+      "inputTypes": ["video/mp4", "video/quicktime", "video/x-msvideo"],
+      "outputType": "video/mp4",
+      "batchSupport": false,
+      "chainable": true,
+      "estimatedDuration": 15
+    },
+    "video_compress": {
+      "displayName": "Compress Video",
+      "category": "video",
+      "engine": "video",
+      "module": "video.compress",
+      "action": "compress",
+      "description": "Reduce video file size",
+      "params": {
+        "bitrate": {
+          "type": "string",
+          "required": false,
+          "default": "2M",
+          "description": "Target bitrate (e.g., 2M, 1M, 500k)"
+        }
+      },
+      "inputTypes": ["video/mp4", "video/quicktime", "video/x-msvideo"],
+      "outputType": "video/mp4",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 30
+    },
+    "audio_trim": {
+      "displayName": "Trim Audio",
+      "category": "audio",
+      "engine": "audio",
+      "module": "audio.trim",
+      "action": "cut",
+      "description": "Trim audio by time range",
+      "params": {
+        "start": {
+          "type": "number",
+          "required": true,
+          "description": "Start time in seconds"
+        },
+        "end": {
+          "type": "number",
+          "required": true,
+          "description": "End time in seconds"
+        }
+      },
+      "inputTypes": ["audio/mpeg", "audio/wav", "audio/ogg"],
+      "outputType": "audio/mpeg",
+      "batchSupport": false,
+      "chainable": true,
+      "estimatedDuration": 5
+    },
+    "audio_convert": {
+      "displayName": "Convert Audio Format",
+      "category": "audio",
+      "engine": "audio",
+      "module": "audio.convert",
+      "action": "format",
+      "description": "Convert audio to different format",
+      "params": {
+        "format": {
+          "type": "string",
+          "required": true,
+          "enum": ["mp3", "wav", "ogg", "m4a", "flac"],
+          "description": "Target format"
+        }
+      },
+      "inputTypes": ["audio/mpeg", "audio/wav", "audio/ogg", "audio/x-m4a"],
+      "outputType": "audio/mpeg",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 5
+    },
+    "text_word_count": {
+      "displayName": "Count Words",
+      "category": "text",
+      "engine": "text",
+      "module": "text.analyze",
+      "action": "wordCount",
+      "description": "Count words, characters, and sentences",
+      "params": {},
+      "inputTypes": ["text/plain"],
+      "outputType": "application/json",
+      "batchSupport": false,
+      "chainable": false,
+      "estimatedDuration": 1
+    },
+    "text_case_convert": {
+      "displayName": "Convert Text Case",
+      "category": "text",
+      "engine": "text",
+      "module": "text.transform",
+      "action": "changeCase",
+      "description": "Convert text to different case",
+      "params": {
+        "case": {
+          "type": "string",
+          "required": true,
+          "enum": ["uppercase", "lowercase", "titlecase", "sentencecase"],
+          "description": "Target case"
+        }
+      },
+      "inputTypes": ["text/plain"],
+      "outputType": "text/plain",
+      "batchSupport": true,
+      "chainable": true,
+      "estimatedDuration": 1
+    },
+    "archive_zip": {
+      "displayName": "Create ZIP Archive",
+      "category": "archive",
+      "engine": "archive",
+      "module": "archive.compress",
+      "action": "zip",
+      "description": "Create ZIP archive from files",
+      "params": {},
+      "inputTypes": ["*/*"],
+      "outputType": "application/zip",
+      "batchSupport": true,
+      "chainable": false,
+      "estimatedDuration": 5,
+      "multipleFiles": true
+    },
+    "archive_extract": {
+      "displayName": "Extract Archive",
+      "category": "archive",
+      "engine": "archive",
+      "module": "archive.extract",
+      "action": "extract",
+      "description": "Extract files from ZIP, RAR, or 7Z archive",
+      "params": {},
+      "inputTypes": ["application/zip", "application/x-rar", "application/x-7z-compressed"],
+      "outputType": "application/zip",
+      "batchSupport": false,
+      "chainable": false,
+      "estimatedDuration": 5
+    }
+  },
+  "pipelines": {
+    "pdf_process_workflow": {
+      "displayName": "PDF Processing Workflow",
+      "description": "Split, compress, and watermark PDF in one pipeline",
+      "steps": [
+        {
+          "tool": "pdf_split",
+          "params": { "pagesPerFile": 5 }
+        },
+        {
+          "tool": "pdf_compress",
+          "params": { "level": "high" }
+        },
+        {
+          "tool": "pdf_watermark",
+          "params": { "text": "CONFIDENTIAL", "opacity": 0.5 }
+        }
+      ]
+    }
+  }
+}
