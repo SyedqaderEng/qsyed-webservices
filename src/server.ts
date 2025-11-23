@@ -13,6 +13,7 @@ import jobRoutes from './routes/job.routes';
 import downloadRoutes from './routes/download.routes';
 import healthRoutes from './routes/health.routes';
 import previewRoutes from './routes/preview.routes';
+import debugRoutes from './routes/debug.routes';
 
 const app = express();
 
@@ -61,6 +62,7 @@ app.use('/api/jobs', jobRoutes);
 app.use('/api/download', downloadRoutes);
 app.use('/api/health', healthRoutes);
 app.use('/api/preview', previewRoutes);
+app.use('/api/debug', debugRoutes);
 
 // Root route
 app.get('/', (req, res) => {

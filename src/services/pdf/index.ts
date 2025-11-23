@@ -10,6 +10,24 @@ import { QueueManager } from '../../queue/queue-manager';
 import { FileHelpers } from '../../utils/file-helpers';
 import { PdfProcessor } from './pdf-processor';
 
+/**
+ * Validate if file is a valid PDF by checking header
+ */
+function isValidPdf(filePath: string): boolean {
+  try {
+    const buffer = Buffer.alloc(5);
+    const fd = fs.openSync(filePath, 'r');
+    fs.readSync(fd, buffer, 0, 5, 0);
+    fs.closeSync(fd);
+
+    // PDF files start with %PDF-
+    const header = buffer.toString('utf8', 0, 5);
+    return header === '%PDF-';
+  } catch (error) {
+    return false;
+  }
+}
+
 export async function processPdfTool(
   toolId: string,
   fileIds: string[],
@@ -18,12 +36,44 @@ export async function processPdfTool(
 ): Promise<string> {
   await QueueManager.updateJobProgress(jobId, 10, `Processing ${toolId}...`);
 
-  // Get input file paths - find actual uploaded files
-  const inputPaths = fileIds.map(id => {
+  // Get input file paths - find actual uploaded files with validation
+  const inputPaths: string[] = [];
+  for (const id of fileIds) {
     const files = fs.readdirSync(config.uploadDir);
     const file = files.find((f: string) => f.startsWith(id));
-    return path.join(config.uploadDir, file || `${id}.pdf`);
-  });
+
+    if (!file) {
+      throw new Error(`File not found for ID: ${id}. Please upload the file first.`);
+    }
+
+    const filePath = path.join(config.uploadDir, file);
+
+    // Validate file exists
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`File does not exist: ${filePath}`);
+    }
+
+    // Validate file size
+    const stats = fs.statSync(filePath);
+    if (stats.size === 0) {
+      throw new Error(`File is empty: ${file}`);
+    }
+
+    // For PDF tools, validate it's a PDF file by extension
+    const ext = path.extname(file).toLowerCase();
+    if (!ext.includes('.pdf')) {
+      throw new Error(`Invalid file type. Expected PDF but got: ${ext}. Please upload a PDF file.`);
+    }
+
+    // Validate PDF header (magic number)
+    if (!isValidPdf(filePath)) {
+      throw new Error(`File ${file} is not a valid PDF. The file may be corrupted or is not a real PDF file.`);
+    }
+
+    inputPaths.push(filePath);
+  }
+
+  await QueueManager.updateJobProgress(jobId, 15, 'Files validated...');
 
   // Generate output file path
   const outputExt = getOutputExtension(toolId);
