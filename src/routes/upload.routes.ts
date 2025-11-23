@@ -5,7 +5,13 @@ import { UploadController } from '../controllers/upload.controller';
 const router = express.Router();
 
 /**
- * POST /api/upload
+ * POST /api/upload/single
+ * Upload a single file
+ */
+router.post('/single', uploadSingle, UploadController.uploadSingle);
+
+/**
+ * POST /api/upload (legacy - same as /single)
  * Upload a single file
  */
 router.post('/', uploadSingle, UploadController.uploadSingle);

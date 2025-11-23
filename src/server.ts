@@ -5,6 +5,7 @@ import config from './config';
 import { errorHandler } from './middleware/error-handler';
 import { FileHelpers } from './utils/file-helpers';
 import { startWorker } from './workers/tool-processor';
+import { loadModules } from './core/loader/module.loader';
 
 // Import routes
 import uploadRoutes from './routes/upload.routes';
@@ -111,6 +112,9 @@ async function startServer() {
   try {
     // Initialize directories
     await initializeDirectories();
+
+    // Load processing modules
+    loadModules();
 
     // Start worker
     startWorker();
