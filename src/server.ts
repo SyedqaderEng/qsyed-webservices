@@ -12,15 +12,25 @@ import toolRoutes from './routes/tool.routes';
 import jobRoutes from './routes/job.routes';
 import downloadRoutes from './routes/download.routes';
 import healthRoutes from './routes/health.routes';
+import previewRoutes from './routes/preview.routes';
 
 const app = express();
 
 // Middleware
 app.use(helmet());
+
+// ⭐ CORS Configuration - MUST be before other middleware
 app.use(cors({
-  origin: config.allowedOrigins,
+  origin: config.nodeEnv === 'development'
+    ? ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001']
+    : config.allowedOrigins,
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  exposedHeaders: ['Content-Length', 'Content-Type'],
+  maxAge: 86400, // 24 hours
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -30,6 +40,7 @@ app.use('/api/tools', toolRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/download', downloadRoutes);
 app.use('/api/health', healthRoutes);
+app.use('/api/preview', previewRoutes);
 
 // Root route
 app.get('/', (req, res) => {
