@@ -13,10 +13,7 @@ export class DebugController {
       if (config.nodeEnv !== 'development') {
         return res.status(403).json({
           success: false,
-          error: {
-            code: 'FORBIDDEN',
-            message: 'Debug endpoints only available in development mode',
-          },
+          error: 'Debug endpoints only available in development mode',
         });
       }
 
@@ -65,10 +62,7 @@ export class DebugController {
     } catch (error: any) {
       res.status(500).json({
         success: false,
-        error: {
-          code: 'DEBUG_ERROR',
-          message: error.message,
-        },
+        error: error.message,
       });
     }
   }
@@ -81,10 +75,7 @@ export class DebugController {
       if (config.nodeEnv !== 'development') {
         return res.status(403).json({
           success: false,
-          error: {
-            code: 'FORBIDDEN',
-            message: 'Debug endpoints only available in development mode',
-          },
+          error: 'Debug endpoints only available in development mode',
         });
       }
 
@@ -95,14 +86,7 @@ export class DebugController {
       if (!file) {
         return res.status(404).json({
           success: false,
-          error: {
-            code: 'FILE_NOT_FOUND',
-            message: `No file found with ID: ${fileId}`,
-            details: {
-              searchedIn: config.uploadDir,
-              availableFiles: files.length,
-            },
-          },
+          error: `No file found with ID: ${fileId}. Searched in ${config.uploadDir}, found ${files.length} files.`,
         });
       }
 
@@ -152,10 +136,7 @@ export class DebugController {
     } catch (error: any) {
       res.status(500).json({
         success: false,
-        error: {
-          code: 'DEBUG_ERROR',
-          message: error.message,
-        },
+        error: error.message,
       });
     }
   }
