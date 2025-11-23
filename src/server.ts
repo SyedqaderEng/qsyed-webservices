@@ -9,6 +9,7 @@ import { loadModules } from './core/loader/module.loader';
 
 // Import routes
 import uploadRoutes from './routes/upload.routes';
+import processRoutes from './routes/process.routes';
 import toolRoutes from './routes/tool.routes';
 import jobRoutes from './routes/job.routes';
 import downloadRoutes from './routes/download.routes';
@@ -58,6 +59,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/upload', uploadRoutes);
+app.use('/api/process', processRoutes); // Frontend-compatible process endpoint
 app.use('/api/tools', toolRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/download', downloadRoutes);
