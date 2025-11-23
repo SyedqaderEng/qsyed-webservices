@@ -10,6 +10,7 @@ import { loadModules } from './core/loader/module.loader';
 // Import routes
 import uploadRoutes from './routes/upload.routes';
 import processRoutes from './routes/process.routes';
+import statusRoutes from './routes/status.routes';
 import toolRoutes from './routes/tool.routes';
 import jobRoutes from './routes/job.routes';
 import downloadRoutes from './routes/download.routes';
@@ -57,12 +58,13 @@ app.use(helmet({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
-app.use('/api/upload', uploadRoutes);
-app.use('/api/process', processRoutes); // Frontend-compatible process endpoint
+// Routes (Frontend-compatible endpoints)
+app.use('/api/upload', uploadRoutes);        // POST /api/upload
+app.use('/api/process', processRoutes);      // POST /api/process
+app.use('/api/status', statusRoutes);        // GET /api/status/:requestId
+app.use('/api/download', downloadRoutes);    // GET /api/download/:fileToken
 app.use('/api/tools', toolRoutes);
 app.use('/api/jobs', jobRoutes);
-app.use('/api/download', downloadRoutes);
 app.use('/api/health', healthRoutes);
 app.use('/api/preview', previewRoutes);
 app.use('/api/debug', debugRoutes);

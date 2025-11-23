@@ -11,10 +11,12 @@ export interface UploadedFile {
 
 export interface JobStatus {
   jobId: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  requestId?: string; // Alias for jobId (frontend compatibility)
+  status: 'queued' | 'processing' | 'ocr' | 'converting' | 'finalizing' | 'done' | 'failed';
   progress?: number; // 0-100
   currentStep?: string;
   downloadUrl?: string;
+  fileToken?: string; // Download token (frontend compatibility)
   outputFileId?: string;
   errorMessage?: string;
   createdAt: Date;
@@ -31,7 +33,7 @@ export interface ProcessingJob {
   fileIds: string[];
   settings: ToolSettings;
   userId?: string;
-  status: JobStatus['status'];
+  status: 'queued' | 'processing' | 'ocr' | 'converting' | 'finalizing' | 'done' | 'failed';
   progress: number;
   currentStep: string;
   outputPath?: string;

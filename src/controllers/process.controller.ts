@@ -12,7 +12,7 @@ interface ProcessRequest {
 }
 
 interface ProcessResponse {
-  jobId: string;
+  requestId: string; // Frontend expects requestId
   status: string;
   tool: string;
   fileId: string;
@@ -57,7 +57,7 @@ export class ProcessController {
       res.json({
         success: true,
         data: {
-          jobId,
+          requestId: jobId, // Frontend expects requestId
           status: 'queued',
           tool: toolId,
           fileId,

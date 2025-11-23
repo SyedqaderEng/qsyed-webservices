@@ -33,7 +33,7 @@ export class QueueManager {
       fileIds,
       settings,
       userId,
-      status: 'pending',
+      status: 'queued',
       progress: 0,
       currentStep: 'Initializing...',
     };
@@ -60,8 +60,8 @@ export class QueueManager {
     const state = await job.getState();
     const data = job.data as ProcessingJob;
 
-    let status: JobStatus['status'] = 'pending';
-    if (state === 'completed') status = 'completed';
+    let status: JobStatus['status'] = 'queued';
+    if (state === 'completed') status = 'done';
     else if (state === 'failed') status = 'failed';
     else if (state === 'active') status = 'processing';
 
@@ -110,9 +110,9 @@ export class QueueManager {
     if (!job) return;
 
     const data = job.data as ProcessingJob;
-    data.status = 'completed';
+    data.status = 'done';
     data.progress = 100;
-    data.currentStep = 'Completed';
+    data.currentStep = 'Finalizing...';
     data.outputPath = outputPath;
 
     await job.updateData(data);
