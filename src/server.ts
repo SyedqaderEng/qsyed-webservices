@@ -18,10 +18,19 @@ const app = express();
 
 // Middleware
 app.use(helmet());
+
+// ⭐ CORS Configuration - MUST be before other middleware
 app.use(cors({
-  origin: config.allowedOrigins,
+  origin: config.nodeEnv === 'development'
+    ? ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001']
+    : config.allowedOrigins,
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  exposedHeaders: ['Content-Length', 'Content-Type'],
+  maxAge: 86400, // 24 hours
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
