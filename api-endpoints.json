@@ -1,0 +1,311 @@
+{
+  "baseUrl": "http://localhost:3000/api",
+  "endpoints": {
+    "upload": {
+      "single": {
+        "method": "POST",
+        "path": "/upload/single",
+        "contentType": "multipart/form-data",
+        "body": {
+          "file": "File object"
+        },
+        "response": {
+          "fileId": "string",
+          "filename": "string",
+          "size": "number",
+          "mimetype": "string"
+        }
+      },
+      "multiple": {
+        "method": "POST",
+        "path": "/upload/multiple",
+        "contentType": "multipart/form-data",
+        "body": {
+          "files": "File[] array"
+        },
+        "response": {
+          "files": [
+            {
+              "fileId": "string",
+              "filename": "string",
+              "size": "number",
+              "mimetype": "string"
+            }
+          ]
+        }
+      }
+    },
+    "preview": {
+      "pdfInfo": {
+        "method": "GET",
+        "path": "/preview/pdf/:fileId/info",
+        "params": {
+          "fileId": "string"
+        },
+        "response": {
+          "pageCount": "number",
+          "title": "string",
+          "author": "string",
+          "pages": "array"
+        }
+      },
+      "pdfPage": {
+        "method": "GET",
+        "path": "/preview/pdf/:fileId/page/:pageNum",
+        "params": {
+          "fileId": "string",
+          "pageNum": "number"
+        },
+        "response": "Image data"
+      },
+      "pdfThumbnails": {
+        "method": "GET",
+        "path": "/preview/pdf/:fileId/thumbnails",
+        "params": {
+          "fileId": "string"
+        },
+        "response": "Array of thumbnail images"
+      },
+      "imageInfo": {
+        "method": "GET",
+        "path": "/preview/image/:fileId/info",
+        "params": {
+          "fileId": "string"
+        },
+        "response": {
+          "width": "number",
+          "height": "number",
+          "format": "string",
+          "channels": "number"
+        }
+      },
+      "imagePreview": {
+        "method": "GET",
+        "path": "/preview/image/:fileId/preview",
+        "params": {
+          "fileId": "string"
+        },
+        "query": {
+          "width": "number (optional, default: 800)",
+          "height": "number (optional, default: 600)"
+        },
+        "response": "Binary image data (JPEG)"
+      },
+      "documentInfo": {
+        "method": "GET",
+        "path": "/preview/document/:fileId/info",
+        "params": {
+          "fileId": "string"
+        },
+        "status": "To be implemented"
+      },
+      "videoInfo": {
+        "method": "GET",
+        "path": "/preview/video/:fileId/info",
+        "params": {
+          "fileId": "string"
+        },
+        "status": "To be implemented"
+      },
+      "audioInfo": {
+        "method": "GET",
+        "path": "/preview/audio/:fileId/info",
+        "params": {
+          "fileId": "string"
+        },
+        "status": "To be implemented"
+      }
+    },
+    "tools": {
+      "list": {
+        "method": "GET",
+        "path": "/tools",
+        "response": {
+          "categories": [
+            {
+              "category": "string",
+              "count": "number",
+              "tools": "array"
+            }
+          ]
+        }
+      },
+      "byCategory": {
+        "method": "GET",
+        "path": "/tools/category/:categoryName",
+        "params": {
+          "categoryName": "pdf|word|excel|image|video|audio|archive|utility"
+        }
+      },
+      "process": {
+        "method": "POST",
+        "path": "/tools/:toolId/process",
+        "params": {
+          "toolId": "string"
+        },
+        "contentType": "application/json",
+        "body": {
+          "fileIds": ["array of file IDs"],
+          "settings": {
+            "note": "Tool-specific settings object"
+          }
+        },
+        "response": {
+          "jobId": "string",
+          "status": "pending",
+          "toolId": "string",
+          "createdAt": "ISO date string"
+        }
+      }
+    },
+    "jobs": {
+      "getStatus": {
+        "method": "GET",
+        "path": "/jobs/:jobId",
+        "params": {
+          "jobId": "string"
+        },
+        "response": {
+          "jobId": "string",
+          "status": "pending|processing|completed|failed",
+          "progress": "number (0-100)",
+          "currentStep": "string",
+          "toolId": "string",
+          "error": "string (if failed)"
+        }
+      },
+      "listAll": {
+        "method": "GET",
+        "path": "/jobs",
+        "response": {
+          "jobs": [
+            {
+              "jobId": "string",
+              "status": "string",
+              "toolId": "string",
+              "progress": "number"
+            }
+          ]
+        }
+      },
+      "cancel": {
+        "method": "DELETE",
+        "path": "/jobs/:jobId",
+        "params": {
+          "jobId": "string"
+        },
+        "response": {
+          "message": "Job cancelled successfully"
+        }
+      }
+    },
+    "download": {
+      "file": {
+        "method": "GET",
+        "path": "/download/:jobId",
+        "params": {
+          "jobId": "string"
+        },
+        "response": "Binary file download"
+      },
+      "info": {
+        "method": "GET",
+        "path": "/download/:jobId/info",
+        "params": {
+          "jobId": "string"
+        },
+        "response": {
+          "filename": "string",
+          "size": "number",
+          "mimetype": "string",
+          "expiresAt": "ISO date string"
+        }
+      }
+    },
+    "health": {
+      "check": {
+        "method": "GET",
+        "path": "/health",
+        "response": {
+          "status": "healthy|unhealthy",
+          "uptime": "number",
+          "redis": "connected|disconnected",
+          "worker": "active|inactive"
+        }
+      }
+    }
+  },
+  "toolSettings": {
+    "pdf-split": {
+      "mode": "pages|individual|range",
+      "pagesPerFile": "number (for mode: pages)",
+      "pageRanges": "string[] (for mode: range, e.g., ['1-3', '4-7'])"
+    },
+    "pdf-merge": {
+      "order": "string (optional, comma-separated file order)"
+    },
+    "pdf-rotate": {
+      "angle": "90|180|270|-90",
+      "pages": "all|1,3,5|1-5"
+    },
+    "pdf-watermark": {
+      "text": "string",
+      "opacity": "number (0-100)",
+      "rotation": "number (degrees)",
+      "fontSize": "number"
+    },
+    "pdf-page-numbers": {
+      "format": "string (e.g., 'Page {n} of {total}')",
+      "position": "top-left|top-center|top-right|bottom-left|bottom-center|bottom-right",
+      "fontSize": "number",
+      "startNumber": "number"
+    },
+    "pdf-remove-pages": {
+      "pages": "string (e.g., '1,3,5' or '1-5')"
+    },
+    "pdf-reorder": {
+      "order": "string (e.g., '3,1,2,4')"
+    },
+    "pdf-metadata": {
+      "title": "string (optional)",
+      "author": "string (optional)",
+      "subject": "string (optional)",
+      "keywords": "string (optional, comma-separated)",
+      "creator": "string (optional)",
+      "producer": "string (optional)"
+    },
+    "pdf-compress": {
+      "quality": "string (optional, not yet implemented)"
+    }
+  },
+  "implementedTools": [
+    "pdf-merge",
+    "pdf-split",
+    "pdf-compress",
+    "pdf-rotate",
+    "pdf-watermark",
+    "pdf-page-numbers",
+    "pdf-remove-pages",
+    "pdf-reorder",
+    "pdf-metadata"
+  ],
+  "statusCodes": {
+    "200": "Success",
+    "400": "Bad Request - Validation error",
+    "404": "Not Found - File or job not found",
+    "413": "Payload Too Large - File size exceeded",
+    "500": "Internal Server Error"
+  },
+  "corsConfig": {
+    "allowedOrigins": [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://127.0.0.1:3000",
+      "http://127.0.0.1:3001"
+    ],
+    "credentials": true,
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"]
+  }
+}
