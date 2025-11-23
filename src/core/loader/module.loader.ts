@@ -4,12 +4,16 @@
  */
 
 import { moduleRegistry } from '../registry/module.registry';
+import { toolsRegistry } from '../../services/tools-registry.service';
 import { PdfSplitModule } from '../../modules/pdf/pdf-split.module';
 import { PdfToWordModule } from '../../modules/pdf/pdf-to-word.module';
 // Import other modules here as they are created
 
 export function loadModules(): void {
   console.log('[Module Loader] Loading processing modules...');
+
+  // Load tools registry configuration
+  toolsRegistry.loadConfig();
 
   // Register PDF modules
   moduleRegistry.register(new PdfSplitModule());

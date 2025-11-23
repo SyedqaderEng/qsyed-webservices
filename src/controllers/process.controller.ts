@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { ApiResponse } from '../types';
 import { AppError } from '../middleware/error-handler';
 import { QueueManager } from '../queue/queue-manager';
-import { ToolRegistry } from '../services/tool-registry';
+import { toolsRegistry } from '../services/tools-registry.service';
 
 interface ProcessRequest {
   fileId: string;
@@ -42,8 +42,8 @@ export class ProcessController {
       // Map frontend tool names to backend tool IDs
       const toolId = ProcessController.mapToolName(tool);
 
-      // Validate tool exists
-      const toolDefinition = ToolRegistry.getTool(toolId);
+      // Validate tool exists in registry
+      const toolDefinition = toolsRegistry.getTool(toolId);
       if (!toolDefinition) {
         throw new AppError(404, `Tool '${tool}' not found. Available tools can be listed at GET /api/tools`);
       }
